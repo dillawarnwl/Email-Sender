@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from .forms import GivenEmailForm, ExcelEmailForm, StringEmailForm
 import openpyxl
 
+
 def from_given_email(request):
     form = GivenEmailForm(request.POST or None)
 
@@ -14,7 +15,8 @@ def from_given_email(request):
         recipient = form.cleaned_data['dest_email']
         message = form.cleaned_data['message']
 
-        html_content = render_to_string('content_html.html', {'message': message})
+        html_content = render_to_string(
+            'content_html.html', {'message': message})
 
         try:
             msg = EmailMultiAlternatives(
@@ -30,33 +32,42 @@ def from_given_email(request):
         return render(request, 'given_email_form.html', context)
 
 
-
 def read_excel_data(excel_file):
-    workbook = openpyxl.load_workbook(excel_file)
-    sheet = workbook.active
+    try:
+        workbook = openpyxl.load_workbook(excel_file)
+        sheet = workbook.active
+        email_addresses = []
 
-    email_addresses = []
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            email = row[0]
 
-    for row in sheet.iter_rows(min_row=2, values_only=True):
-        email = row[0]
-        
-        if email:
-            email_addresses.append(email)
+            if email:
+                email_addresses.append(email)
 
-    return email_addresses
+        return email_addresses
+    except Exception as e:
+        # Log or handle the exception as needed
+        return f"Error reading Excel data: {e}"
+
 
 def send_emails(request, email_addresses, subject, message):
-    for email_address in email_addresses:
-        
-        html_content = render_to_string('content_html.html', {'message': message})  
-        email = EmailMessage(
-            subject,
-            html_content,
-            'dillawar612@gmail.com',  
-            [email_address],
-        )
-        email.content_subtype = 'html'  
-        email.send()
+    try:
+        for email_address in email_addresses:
+            html_content = render_to_string(
+                'content_html.html', {'message': message})
+            email = EmailMessage(
+                subject,
+                html_content,
+                'dillawar612@gmail.com',
+                [email_address],
+            )
+            email.content_subtype = 'html'
+            email.send()
+        messages.success(request, 'Emails sent successfully.')
+    except Exception as e:
+        # Log or handle the exception as needed
+        messages.error(request, f'Error sending emails.{e}')
+
 
 def from_excel(request):
     if request.method == 'POST':
@@ -66,13 +77,8 @@ def from_excel(request):
             subject = form.cleaned_data['subject']
             message = form.cleaned_data['message']
             email_addresses = read_excel_data(excel_file)
-            
+
             send_emails(request, email_addresses, subject, message)
-
-            
-            messages.success(request, 'Emails sent successfully.')
-
-            
             return render(request, 'success.html')
 
     else:
@@ -81,6 +87,7 @@ def from_excel(request):
     context = {'form': form}
     return render(request, 'excel_form.html', context)
 
+
 def from_string(request):
     form = StringEmailForm(request.POST or None)
     if form.is_valid():
@@ -88,10 +95,10 @@ def from_string(request):
         subject = form.cleaned_data['subject']
         message = form.cleaned_data['message']
 
-        email_addresses = [email.strip() for email in email_string.split(',') if email.strip()]
+        email_addresses = [email.strip()
+                           for email in email_string.split(',') if email.strip()]
         send_emails(request, email_addresses, subject, message)
-
-        messages.success(request, 'Emails sent successfully.')
         return render(request, 'success.html')
+
     context = {'form': form}
     return render(request, 'string_form.html', context)
