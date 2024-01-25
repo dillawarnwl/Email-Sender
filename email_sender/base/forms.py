@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 class GivenEmailForm(forms.Form):
     dest_email = forms.EmailField(
@@ -11,10 +12,15 @@ class GivenEmailForm(forms.Form):
         label="Message",
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': '5', 'placeholder': 'Enter message...'}))
 
+def validate_excel_file(value):
+    if not value.name.endswith('.xls') and not value.name.endswith('.xlsx'):
+        raise ValidationError('Please upload a valid Excel file.')
+    
 class ExcelEmailForm(forms.Form):
     excel_file = forms.FileField(
         label="Upload Excel File", required=False,
-        widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        validators=[validate_excel_file])
     subject = forms.CharField(
         label="Subject",
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter subject'}))

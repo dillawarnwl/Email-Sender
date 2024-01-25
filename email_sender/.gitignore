@@ -1,0 +1,10 @@
+# .gitignore
+
+# Ignore virtual environment folder
+venv/
+
+# Ignore Django migration files
+**/migrations/
+
+# Ignore secret environment variables
+.env
