@@ -1,0 +1,12 @@
+{% extends 'partials/index.html' %}
+{% load static %}
+{% block title %}To Chat{% endblock title %}
+{% block body %}
+  <h2>Make Chat with Google Model</h2>
+  <form method="post" action="{% url 'make_chat_with_google_model' %}">
+    {% csrf_token %}
+    {{field.label_tag}}
+    {{field}}
+    <button type="submit">Submit</button>
+  </form>
+{% endblock body %}

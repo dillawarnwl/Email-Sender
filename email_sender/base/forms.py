@@ -1,6 +1,9 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
+class EmailQueryForm(forms.Form):
+    query = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': '5', 'placeholder': 'Enter query...'}))
+
 class GivenEmailForm(forms.Form):
     dest_email = forms.EmailField(
         label="Reception Email",

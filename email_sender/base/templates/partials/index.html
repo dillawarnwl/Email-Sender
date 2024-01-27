@@ -8,8 +8,10 @@
   <title>BES - {% block title %} {% endblock title %}</title>
   {% block css %}
   {% endblock css %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
@@ -32,17 +34,32 @@
     </div>
   </ul>
   {% endif %}
+  <div class="container">
+    <div class="chat-box">
+        <h2>Chat with Email Writer</h2>
+        <form action="#" method="post">
+          {% csrf_token %}
+            <label for="aiMessage">Need help?</label>
+            <textarea id="aiMessage" name="aiMessage" rows="4" cols="50"
+                placeholder="Type your query here..."></textarea>
+            <button type="submit">Generate Message</button>
+        </form>
+    </div>
+    <div class="form-box">
+      {% block body %}
+    
+      {% endblock body %}
+    </div>
+</div>
 
-  {% block body %}
-
-  {% endblock body %}
-
-
+  
+  {% include 'partials/footer.html' %}
   {% block script %}
   {% endblock script %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
+  <script src="{% static 'js/script.js' %}"></script>
 </body>
 
 </html>

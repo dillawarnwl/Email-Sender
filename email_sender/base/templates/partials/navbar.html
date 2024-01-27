@@ -1,26 +1,12 @@
-<nav class="navbar navbar-expand-lg bg-body-secondary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Email Sender</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'from_given_email' %}">One-to-One</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'from_excel' %}">From Excel</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'from_string' %}">From String</a>
-          </li>
-        </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-      </div>
-    </div>
-  </nav>
+{% load static %}
+<nav>
+  <div>
+    <li><a href="/"><img class="logo" src="{% static 'images/logo.jpg' %}" alt="logo"></a></li>
+  </div>
+  <div class="nav-item">
+    <li><a href="{% url 'from_given_email' %}"><i class="fas fa-envelope"></i> Given Email</a></li>
+    <li><a href="{% url 'from_excel' %}"><i class="fas fa-file-excel"></i> From Excel</a></li>
+    <li><a href="{% url 'from_string' %}"><i class="fas fa-font"></i> From String</a></li>
+  </div>
+  <div class="hamburger">&#9776;</div>
+</nav>

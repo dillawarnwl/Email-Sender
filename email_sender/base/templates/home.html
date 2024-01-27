@@ -1,0 +1,50 @@
+{% extends 'partials/index.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}
+
+{% block css %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        font-size: 2em;
+        margin-bottom: 0.5em;
+    }
+
+    p {
+        font-size: 1.2em;
+        line-height: 1.5em;
+        margin-bottom: 1em;
+    }
+</style>
+{% endblock css %}
+
+{% block body %}
+
+<div class="container">
+    <div class="col-lg-3"></div>
+    <div class="container col-lg-6 mt-5">
+        <h1>Chat with Google Model</h1>
+        <form method="post" action="{% url 'email_query' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+        </form>
+        {% if generated_email_message %}
+        <h2>Generated Message</h2>
+        <!-- Use the safe filter to render HTML content -->
+        <div>{{ generated_email_message|safe }}</div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock body %}
+
+{% block script %}
+<!-- Include any additional JavaScript scripts if needed -->
+{% endblock script %}
