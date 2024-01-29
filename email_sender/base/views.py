@@ -3,37 +3,36 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-import requests
 from .forms import GivenEmailForm, ExcelEmailForm, StringEmailForm, EmailQueryForm
 import openpyxl
 # views.py
-from langchain_google_genai import ChatGoogleGenerativeAI
-import os
+# from langchain_google_genai import ChatGoogleGenerativeAI
+# import os
 
-MODEL = os.environ.get("MODEL")
-GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+# MODEL = os.environ.get("MODEL")
+# GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
-def generate_email_message(query):
-    try:
-        llm = ChatGoogleGenerativeAI(model="gemini-pro")
-        query_with_email_content = f"act as content writer: {query}"
-        result = llm.invoke(query_with_email_content)
-        return result.text if hasattr(result, 'text') else str(result)
-    except Exception as e:
-        # Log the exception or handle it appropriately
-        return f"An error occurred while generating the email message.{e}"
+# def generate_email_message(query):
+#     try:
+#         llm = ChatGoogleGenerativeAI(model="gemini-pro")
+#         query_with_email_content = f"act as content writer: {query}"
+#         result = llm.invoke(query_with_email_content)
+#         return result.text if hasattr(result, 'text') else str(result)
+#     except Exception as e:
+#         # Log the exception or handle it appropriately
+#         return f"An error occurred while generating the email message.{e}"
 
-def email_query(request):
-    if request.method == 'POST':
-        form = EmailQueryForm(request.POST)
-        if form.is_valid():
-            user_query = form.cleaned_data['query']
-            generated_email_message = generate_email_message(user_query)
-            return render(request, 'home.html', {'form': form, 'generated_email_message': generated_email_message})
-    else:
-        form = EmailQueryForm()
+# def email_query(request):
+#     if request.method == 'POST':
+#         form = EmailQueryForm(request.POST)
+#         if form.is_valid():
+#             user_query = form.cleaned_data['query']
+#             generated_email_message = generate_email_message(user_query)
+#             return render(request, 'home.html', {'form': form, 'generated_email_message': generated_email_message})
+#     else:
+#         form = EmailQueryForm()
 
-    return render(request, 'home.html', {'form': form})
+#     return render(request, 'home.html', {'form': form})
 
 
 
